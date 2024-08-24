@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 public enum Version implements Comparable<Version> {
 
+    v1_21_R1(25),
     v1_20_R4(24),
     v1_20_R3(23),
     v1_20_R2(22),
@@ -55,6 +56,16 @@ public enum Version implements Comparable<Version> {
         String packageName = server.getClass().getPackage().getName();
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
 
+        if (server.getBukkitVersion().contains("1.21")) {
+            String nmsVersion = server.getBukkitVersion().replace("1.21", "v1_21").replace("-R0.1-SNAPSHOT", "_R1");
+
+            try {
+                return valueOf(nmsVersion);
+            } catch (final IllegalArgumentException e) {
+                return Version.UNKNOWN;
+            }
+        }
+        
         try {
             return valueOf(version.trim());
         } catch (final IllegalArgumentException e) {
